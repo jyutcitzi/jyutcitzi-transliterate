@@ -1,6 +1,6 @@
 # jyutcitzi-transliterate
 
-A simple Python3 tool for the transliteration of the Sinoglyph-Latin script to either a Jyutcitzi-only or Honzi-Jyutcitzi mixed script.
+A simple Python3 tool for the transliteration of the existing Sinoglyph-Latin script used in Hong Kong Cantonese into either a Jyutcitzi-only or Honzi-Jyutcitzi mixed script.
 
 ## Example
 ```
