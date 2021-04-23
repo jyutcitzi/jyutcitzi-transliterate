@@ -18,6 +18,8 @@ pip install ToJyutping
 pip install pycantonese
 pip install wordsegment
 ```
+In order to render the Jyutcitzi glyphs when using the font mode, install the fonts at https://github.com/jyutcitzi/jyutcitzi-fonts.
+
 ## Usage
 ```
 usage: transliterate.py [-h] [-m MODE] [-s STYLE] [-r R] [-v V] [-t DIRECTION]
