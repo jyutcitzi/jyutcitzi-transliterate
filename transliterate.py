@@ -1,3 +1,4 @@
+import sys
 import ToJyutping
 import pycantonese as pc
 import sqlite3
@@ -446,12 +447,16 @@ def file_transliterator(file, mode='font', orthography='honzi_jcz', use_repeat_c
 
     return "Error: couldn't read " + file
 
+def pipe_transliterator(input, file=None, mode='font', orthography='honzi_jcz', use_repeat_char=True,
+                  initial_r_block="r", v_block="v", tone_config='horizontal', use_schwa_char=False):
+    return transliterate(input, mode, orthography, use_repeat_char,
+                      initial_r_block, v_block, tone_config, use_schwa_char)
+
 ## code for running command
 from argparse import ArgumentParser
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument("file", help="read input text from FILE", metavar="FILE")
     parser.add_argument("-m", "--mode", dest="mode",
                         help="use font or web-style characters", metavar="MODE", default='font')
     parser.add_argument("-s", "--style", dest="orthography",
@@ -472,11 +477,22 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
-
-    print(file_transliterator(**vars(args)))
-
-    # print(args)
-
-
-    #input, mode='font', orthography='honzi_jcz', use_repeat_char=True,
-                      # initial_r_block="r", v_block="v", tone_config='horizontal', use_schwa_char=False
+    if not sys.stdin.isatty():
+        print(pipe_transliterator(sys.stdin.read(), **vars(args)))
+    else:
+        title = "Interactive Jyutcitzi Interpreter"
+        print(len(title)*"-")
+        print(title)
+        print(len(title)*"-")
+        howto = "Howto: Input some text, and the JCZ transliterator will transliterate into the user-specified writing orthography."
+        print(howto)
+        print()
+        while True:
+            t = transliterate(input('Please enter your text (Quit with CTRL + C (*nix) or CTRL + Z (Windows)):\n'), **vars(args))
+            if len(t) > 0:
+                print('Output:')
+                print(10*'-')
+                print(t)
+                print(10*'-')
+            else:
+                print('JCZ transliterator was unable to transliterate your text into JCZ.')
