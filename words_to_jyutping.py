@@ -72,7 +72,7 @@ devoice = {'b': 'p', 'd': 't', 'g': 'k'}
 def word_to_jyutping(s, cur_cmu=None, debug=False):
     locally_open_cmu = False
     if cur_cmu is None:
-        con_cmu = sqlite3.connect('cmudict.db')
+        con_cmu = sqlite3.connect('/content/drive/MyDrive/jcz/cmudict.db')
         cur_cmu = con_cmu.cursor()
         locally_open_cmu = True
     assert cur_cmu is not None
@@ -102,6 +102,7 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
     syllable = ''
     carry_w = False
     carry_r = False
+    # carry_j = False
     while i < len(split):
       if carry_r:
         syllable += "r"
@@ -110,6 +111,10 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
         syllable += "w"
         carry_w = False
       curr_consts = ""
+      # if carry_j:
+      #   syllable += "j"
+      #   carry_j = False
+      # curr_consts = ""
 
       while split[i] in consonants:
         if i == 0 and split[0] == 'V':
@@ -130,6 +135,15 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
           return outs
       if curr_consts == 'th':
         curr_consts = 'd'
+
+      if len(curr_consts) > 1 and curr_consts[0] == 'r':
+        outs.append('aa')
+        curr_consts = curr_consts[1:]
+
+      if len(curr_consts) > 2 and curr_consts[0:2] in {'sh','ch','zh','sj','zj','cj'}:
+        outs.append(curr_consts[0:2])
+        curr_consts = curr_consts[2:]
+
       syllable += curr_consts
 
       # split[i] is a vowel
@@ -138,10 +152,14 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
       else:
         vowel = vowels[split[i]]
       other_bit = ""
+
       if i+1 < len(split) and split[i] == 'ER' and split[i+1] in vowels:
         carry_r = True
 
-      if i > 0 and i+1 < len(split) and split[i] == 'AH' and split[i+1] == 'L':
+      # if i+1 < len(split) and split[i] == 'IY' and split[i+1] in vowels: # reinforcement vs rearrangement
+      #   carry_j = True
+
+      if i > 0 and i+1 < len(split) and split[i] in 'AH' and split[i+1] == 'L':
         # i==0: alacrity
         if i > 1 and  split[i-1] == 'Y':
           # calculator
@@ -155,6 +173,9 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
         else:
           vowel = 'a'
           i += 1
+      elif split[i] == 'EH' and split[i+1] == 'L' and split[i+2] in consonants:
+        vowel = 'eu'
+        i += 2
       elif split[i-1] == 'Y' and split[i] == 'UW':
         syllable = syllable[:-1] + "i"
         vowel = 'u'
@@ -170,9 +191,11 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
         carry_w = True
       elif i+1 < len(split) and split[i] == 'AO' and split[i+1] == 'R':
         vowel = 'o'
-        if i+2 < len(split) and split[i+2] in end_conses:
+        if i+2 < len(split) and split[i+2] in end_conses and split[i+2] != 'G': # organic
           other_bit = end_conses[split[i+2]]
-          i += 1
+          if split[i+2] in {'S','D'}:
+            i += 1
+          # i += 1
         i += 2
       elif i+1 < len(split) and split[i]+' '+split[i+1] in special_cases:
         vowel = special_cases[split[i]+' '+split[i+1]]
@@ -197,6 +220,18 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
           if split[i] == 'AY' and split[i+1] in {'P','T','K'}:
             vowel = 'ai' # hike is haik not haaik
             i += 1
+          elif split[i] in vowels and split[i+1] in {'N', 'M', 'T'}:
+            vowel = vowels[split[i]]
+            if split[i+1] in {'N', 'M'} and i+1 != len(split) - 1 and split[i+2] in vowels.keys() | {'Y'}:
+              if split[i] == 'AA':
+                vowel += end_conses[split[i+1]]
+            elif not (split[i] in {'AW', 'AY', 'EY', 'OW', 'OY'} and split[i+1] == 'T'): # dipthongs, makes things sound more cantonese
+              vowel += end_conses[split[i+1]]
+            if i+2 < len(split) and split[i+2] in vowels.keys() | {'Y'}:
+              other_bit = ''
+              i += 1
+            else:
+              i += 2 # skip N/M/T as next onset
           elif i+2 < len(split) and split[i+2] in vowels:
             # other_bit = end_conses[split[i+1]]
             i += 1
@@ -208,6 +243,7 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
             i += 2
         else:
           i += 1
+
 
       #further adjustment
       # now len(split)-2 is N/K and i=len(split)-1 is T
@@ -223,9 +259,10 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
         i += 1
         # skip the K
       if i + 1 < len(split) and vowel != "" and other_bit != "" and \
-          split[i] in {'S','Z'} and split[i+1] in consonants:
+          split[i] in {'S','Z'} and split[i+1] in consonants.keys() - {'Y'}:
         other_bit += 's'
-        i += 1
+        if split[i+1] not in {'P','B'}:
+          i += 1
 
       syllable += vowel
       syllable += other_bit
