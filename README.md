@@ -1,6 +1,6 @@
 # jyutcitzi-transliterate
 
-A simple tool for the transliteration of Sinoglyph-Latin script to either a Jyutcitzi-only or Honzi-Jyutcitzi mixed script.
+A simple Python3 tool for the transliteration of the existing Sinoglyph-Latin script used in Hong Kong Cantonese into either a Jyutcitzi-only or Honzi-Jyutcitzi mixed script.
 
 ## Example
 ```
@@ -10,12 +10,16 @@ $ python transliterate.py sample.txt --mode web
 禾兮`，我大丌ﾞ五.⁼係爻彡¯々已經亾兮´丩个´度好力旡`夫旡¯丩今´噏止个´你丩个´大子¯丩今`臼了⁼力了¯丩旡´央旡˝丩乍`力乍`文旡¯？乃乍⁼，你五.⁼好丩今`忟憎先。禾兮`你文兮ﾞ諗住玩我乍`⁼，我已經力卂¯熟止个´份央旡˝丩乍`力乍¯。我大丌ﾞ淨話個并禾旡·厶`·厶云·天丌·厶亾云·已經臼乍·夫乍·厶介`阿天欠·并禾子·并旡·乍`·丩个´份大百·臼央今·文円·入面大子¯比乎·力乜·并丐·乃`·丩乍`力乍`，你之前想幫手并禾乎·夫`·夫禾必·份央旡˝就早響乍`¯文乍`。重有乍`⁼，你鬧乜臼么·止夕¯，我此今⁼日都係爻彡¯先亾兮´比乎·大十·并旡·厶天·飛返力兮⁼止乍¯文乍`，使五.⁼使丩今`火滾乍`⁼？介`¯算力乍`，我大丌ﾞ不如都係下個禮拜再開會傾過力乍¯係文兮ﾞ先，我而家要趕住去健身中心做止央欠·臼頁·夫必·，係丩今´先力乍¯掰々。
 $ python transliterate.py sample.txt > out.txt
 ```
+![alt text](https://github.com/jyutcitzi/jyutcitzi-transliterate/blob/6416ded789db13e416cde9990221d6a098cf7ceb/images/out.png "out.txt")
+
 ## Installation
 ```
 pip install ToJyutping
 pip install pycantonese
 pip install wordsegment
 ```
+In order to render the Jyutcitzi glyphs when using the font mode, install the fonts at https://github.com/jyutcitzi/jyutcitzi-fonts.
+
 ## Usage
 ```
 usage: transliterate.py [-h] [-m MODE] [-s STYLE] [-r R] [-v V] [-t DIRECTION]
