@@ -398,6 +398,8 @@ if __name__ == '__main__':
     parser.add_argument("-a","--alg", dest="algorithm",
                         help="algorithm for obtaining Jyutping romanizations: PyCantonese or ToJyutping",
                         metavar="ALGORITHM", default='PyCantonese')
+    parser.add_argument("-x","--sep_eng_words", dest="sep_eng_words",
+                        help="whether to add whitespace between English words in the output", metavar='BOOL', type=bool, default=True)
 
     args = parser.parse_args()
     if not sys.stdin.isatty():
