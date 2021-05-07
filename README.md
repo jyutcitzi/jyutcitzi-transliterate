@@ -36,19 +36,25 @@ In order to render the Jyutcitzi glyphs when using the font mode, install the fo
 ```
 usage: transliterate.py [-h] [-m MODE] [-s STYLE] [-r R] [-v V] [-t DIRECTION]
                         [--use_repeat_char BOOL] [--use_schwa_char BOOL]
+                        [-a ALGORITHM]
 
 optional arguments:
   -h, --help            show this help message and exit
   -m MODE, --mode MODE  use font or web-style characters
   -s STYLE, --style STYLE
-                        use jcz-only (jcz_only) or sinoglyph-jcz (honzi_jcz) writing
-                        style
-  -r R, --r_block R     whether to use r, wl or w for representing the onset 'r'
+                        use jcz-only (jcz_only) or sinoglyph-jcz (honzi_jcz)
+                        writing style
+  -r R, --r_block R     whether to use r, wl or w for representing the onset
+                        'r'
   -v V, --v_block V     whether to use v or f for representing the onset 'v'
   -t DIRECTION, --tone_config DIRECTION
-                        whether to use vertical or horizontal ticks for tones 1 and 4
+                        whether to use vertical or horizontal ticks for tones
+                        1 and 4
   --use_repeat_char BOOL
                         whether to use the repeat glyph 々
   --use_schwa_char BOOL
                         whether to use 亇 for the final 'a' instead of 乍
+  -a ALGORITHM, --alg ALGORITHM
+                        algorithm for obtaining Jyutping romanizations:
+                        PyCantonese or ToJyutping
 ```
