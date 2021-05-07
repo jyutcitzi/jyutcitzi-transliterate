@@ -36,7 +36,7 @@ In order to render the Jyutcitzi glyphs when using the font mode, install the fo
 ```
 usage: transliterate.py [-h] [-m MODE] [-s STYLE] [-r R] [-v V] [-t DIRECTION]
                         [--use_repeat_char BOOL] [--use_schwa_char BOOL]
-                        [-a ALGORITHM]
+                        [-a ALGORITHM] [-x BOOL]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -57,4 +57,7 @@ optional arguments:
   -a ALGORITHM, --alg ALGORITHM
                         algorithm for obtaining Jyutping romanizations:
                         PyCantonese or ToJyutping
+  -x BOOL, --sep_eng_words BOOL
+                        whether to add whitespace between English words in the
+                        output
 ```
