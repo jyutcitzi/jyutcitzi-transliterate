@@ -72,7 +72,7 @@ devoice = {'b': 'p', 'd': 't', 'g': 'k'}
 def word_to_jyutping(s, cur_cmu=None, debug=False):
     locally_open_cmu = False
     if cur_cmu is None:
-        con_cmu = sqlite3.connect('/content/drive/MyDrive/jcz/cmudict.db')
+        con_cmu = sqlite3.connect('cmudict.db')
         cur_cmu = con_cmu.cursor()
         locally_open_cmu = True
     assert cur_cmu is not None
@@ -180,7 +180,7 @@ def word_to_jyutping(s, cur_cmu=None, debug=False):
         syllable = syllable[:-1] + "i"
         vowel = 'u'
         i += 1
-      elif split[i] == 'AE' and split[i+1] == 'P' and split[i+2] in vowels:
+      elif i+2 < len(split) and split[i] == 'AE' and split[i+1] == 'P' and split[i+2] in vowels:
         vowel = 'ep'
         i += 1
       elif i+2 < len(split) and split[i] == 'AE' and split[i+1] in {'G','K'} and split[i+2] == 'L':
